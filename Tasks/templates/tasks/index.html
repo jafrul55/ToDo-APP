@@ -1,0 +1,150 @@
+{% extends 'tasks/base.html' %} {% block content %}
+<style>
+  .Headcolor {
+    width: 100%;
+    height: 50px;
+    background-color: #0dc7d4cf;
+  }
+  .fontStyle {
+    color: black;
+    text-align: center;
+    background-color: #c7e533;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+  }
+  .TEXT {
+    color: white;
+    font-size: 20px;
+  }
+
+  .class1 {
+    background-color: rgb(16, 198, 204);
+    margin: 5px;
+    border: 2px solid black;
+    display: inline;
+    animation-duration: 5s;
+    font-family: fantasy;
+    font-weight: bold;
+    position: relative;
+    animation: jafrul 5s infinite;
+  }
+  #div1 {
+    animation-timing-function: linear;
+  }
+  #div2 {
+    animation-timing-function: ease;
+  }
+  #div3 {
+    animation-timing-function: ease-in;
+  }
+  #div4 {
+    animation-timing-function: ease-out;
+  }
+  #div5 {
+    animation-timing-function: ease-in-out;
+  }
+
+  @keyframes jafrul {
+    from {
+      left: 0px;
+    }
+    to {
+      left: 300px;
+    }
+  }
+</style>
+<div>
+  <div class="container pt-4">
+    <div class="row p-0 mt-4">
+      <!-- For task form -->
+      <div class="col-lg-4 mx-auto shadow p-0">
+        <div class="Headcolor">
+          <h2 class="text-center">Daily Task Counter</h2>
+        </div>
+        <div class="p-4 bg-light h-1">
+          <form action="{% url 'add_todo'%}" method="POST">
+            {% csrf_token %} {{form.as_p}}
+            <hr />
+            <input type="submit" value="ADD" class="btn btn-info" />
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <div class="">
+          <h1 class="fontStyle">Task Schedule</h1>
+        </div>
+        <div class="border">
+          {% if todos|length == 0 %}
+
+          <div class="p-4">
+            <br />
+            <br />
+            <div class="alert alert-info text-center">
+              <p class="" style="font-size: 30px">No Todos</p>
+            </div>
+            <br />
+            <br />
+          </div>
+
+          {%else%}
+          <div>
+            <table class="table">
+              <thead>
+                <tr class="bg-info">
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for todo in todos %}
+                <tr class="TEXT">
+                  <td>{{forloop.counter}}</td>
+                  <td>{{todo.title}}</td>
+                  <td>{% if todo.status == 'C'%} ✅ {%else%} 🕒 {%endif%}</td>
+                  <td>{{todo.priority}}</td>
+                  <td>
+                    <a
+                      href="{% url 'delete_todo' todo.id %}"
+                      title="Delete"
+                      class=""
+                      >🗑️</a
+                    >
+                    {% if todo.status == 'P'%}
+                    <a
+                      href="{% url 'change_todo' todo.id 'C' %}"
+                      title="Mark Completed"
+                      class=""
+                      >✅</a
+                    >
+                    {%else%}
+                    <a
+                      href="{% url 'change_todo' todo.id 'P'%}"
+                      title="Mark Pending"
+                      class=""
+                      >🕒</a
+                    >
+                    {%endif%}
+                  </td>
+                </tr>
+                {%endfor%}
+              </tbody>
+            </table>
+          </div>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+  <br /><br />
+  <footer>
+    <div>
+      <h4 class="class1">Jafrul Alam Tusar</h4>
+    </div>
+  </footer>
+</div>
+{% endblock %}
